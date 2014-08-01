@@ -1,0 +1,11 @@
+saijan,Sai Janjanam
+firefox,Firefox Firefox
+cool,Cool Guy
+fire,Fire Ice
+Google,google google
+newWorld,Firstname Lastname
+hotmail,Hotmail Gmail
+asdf,asdf asdf
+zxcv,zxcv zxcv
+ghjk,ghjk ghjk
+tyui,tyui tyui

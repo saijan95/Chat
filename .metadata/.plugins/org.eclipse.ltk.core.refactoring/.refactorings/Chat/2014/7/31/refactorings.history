@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;&apos; to &apos;ChatApp.addContact()&apos;&#x0D;&#x0A;- Original project: &apos;Chat&apos;&#x0D;&#x0A;- Destination element: &apos;ChatApp.addContact()&apos;&#x0D;&#x0A;- Original element: &apos;ChatApp.incominChatMessage(...)&apos;" description="Copy method" destination="/src&lt;{ChatApp.java[ChatApp~addContact" element1="/src&lt;{ChatApp.java[ChatApp~incominChatMessage~QString;~QString;" flags="589830" id="org.eclipse.jdt.ui.copy" members="1" policy="org.eclipse.jdt.ui.copyMembers" stamp="1406590117322" version="1.0"/>
+</session>
