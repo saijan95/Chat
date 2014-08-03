@@ -7,16 +7,17 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-public class FriendRequestDialog extends JDialog {
+public class FriendRequestDialog extends JDialog implements Runnable {
 	private JButton acceptButton;
 	private JButton cancelButton;
 	private String contactName;
 	private Contact contact;
+	private ChatApp chatApp;
 	
-	public FriendRequestDialog(JFrame owner, String title, boolean modal, ChatApp chatApp, Contact contact) {
-		super(owner, title, modal);
+	public FriendRequestDialog(ChatApp owner, String title, boolean modal, Contact contact) {
+		super((JFrame)owner, title, modal);
 		setSize(350,200);
-		setLocationRelativeTo(owner);
+		setLocationRelativeTo((JFrame)owner);
 		setResizable(false);
 		
 		GridBagLayout layout = new GridBagLayout();
@@ -39,6 +40,7 @@ public class FriendRequestDialog extends JDialog {
 		
 		this.contactName = contact.getName();
 		this.contact = contact;
+		chatApp = owner;
 		
 		JLabel nameLabel = new JLabel(this.contactName);
 		Font nameFont = new Font("Segoe WP", Font.BOLD, 14);
@@ -83,7 +85,7 @@ public class FriendRequestDialog extends JDialog {
 		
 		acceptButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				((DialogClientInterface)getOwner()).dialogFinished(getClass().getName());
+				accept();
 				dispose();
 			}
 		});
@@ -96,5 +98,13 @@ public class FriendRequestDialog extends JDialog {
 		});	
 	}
 	
+	private void accept() {
+		chatApp.answerFriendRequest(this);
+	}
 	protected Contact getContact() { return contact; }
+
+	@Override
+	public void run() {
+		this.setVisible(true);
+	}
 }

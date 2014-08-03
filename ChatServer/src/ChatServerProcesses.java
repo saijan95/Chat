@@ -115,8 +115,6 @@ public class ChatServerProcesses {
 					}
 					
 					contacts.add(contact);
-					
-					System.out.println(contact[0]);
 				}
 			}
 			

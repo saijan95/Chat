@@ -106,7 +106,7 @@ public class ContactsListPanel extends JPanel {
 	}
 	
 	protected void select(ContactCard contactCard) {
-		if(contactCard.isSelected() == false) {
+		if((contactCard.isSelected() == false) && (contactCard.getContact().getStatus().equals("ONLINE"))) {
 			contactCard.setBackground(Color.GRAY);
 			contactCard.setSelected(true);
 			selectedContactCardsList.add(contactCard);

@@ -10,13 +10,12 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 public class ChatApp extends JFrame implements DialogClientInterface {
-	private final String CHATSERVERIP = "169.254.80.80";
+	private final String CHATSERVERIP = "192.168.12.5";
 	private final int CHATSERVERPORT = 5000;
 	private static LoginDialog loginDialog;
 	private ContactsListPanel contactsListPanel;
 	private AddContactDialog addContactDialog;
 	private NewAccountDialog newAccountDialog;
-	private FriendRequestDialog friendRequestDialog;
 	private User user;
 	
 	private Server server;
@@ -127,9 +126,10 @@ public class ChatApp extends JFrame implements DialogClientInterface {
 	protected void showFriendRequests() {
 		ArrayList<Contact> friendRequestsList = user.getFriendRequestsList();
 		for(int i = 0; i < friendRequestsList.size(); i++) {
-			friendRequestDialog = new FriendRequestDialog((JFrame)this, "Friend Request", true, this, 
+			FriendRequestDialog friendRequestDialog = new FriendRequestDialog(this, "Friend Request", true, 
 					friendRequestsList.get(i));
-			friendRequestDialog.setVisible(true);
+			Thread friendRequestThread = new Thread(friendRequestDialog);
+			friendRequestThread.start();
 		}
 	}
 	
@@ -218,6 +218,26 @@ public class ChatApp extends JFrame implements DialogClientInterface {
 		System.exit(0);
 	}
 	
+	protected void answerFriendRequest(FriendRequestDialog frd) {
+		client.connectToServer();
+		ArrayList<String[]>contactsInformation = client.answerFriendRequest(user.getUsername(), frd.getContact().getUsername(), "FRIEND");
+		
+		user.getContactsList().clear();
+		user.getFriendRequestsList().clear();
+		
+		if(contactsInformation != null) {
+			for(int i = 0; i < contactsInformation.size(); i++) {
+				String[] contactInformation = contactsInformation.get(i);
+				
+				if(contactInformation[2].equals("PENDING"))
+					user.getFriendRequestsList().add(new Contact(contactInformation[0], contactInformation[1], contactInformation[2]));
+				else
+					user.getContactsList().add(new Contact(contactInformation[0], contactInformation[1], contactInformation[2]));
+			}
+			contactsListPanel.updateList();
+		}
+	}
+	
 	@Override
 	public void dialogFinished(String dialogType) {
 		if(dialogType.startsWith("LoginDialog")) {
@@ -274,25 +294,6 @@ public class ChatApp extends JFrame implements DialogClientInterface {
 			client.addContact(user.getUsername(), addContactDialog.getUsername());
 			addContactToUser(addContactDialog.getUsername(), addContactDialog.getUsername(), "OFFLINE");
 		}
-		else if(dialogType.startsWith("FriendRequestDialog")) {
-			client.connectToServer();
-			ArrayList<String[]>contactsInformation = client.answerFriendRequest(user.getUsername(), friendRequestDialog.getContact().getUsername(), "FRIEND");
-			
-			user.getContactsList().clear();
-			user.getFriendRequestsList().clear();
-			
-			if(contactsInformation != null) {
-				for(int i = 0; i < contactsInformation.size(); i++) {
-					String[] contactInformation = contactsInformation.get(i);
-					
-					if(contactInformation[2].equals("PENDING"))
-						user.getFriendRequestsList().add(new Contact(contactInformation[0], contactInformation[1], contactInformation[2]));
-					else
-						user.getContactsList().add(new Contact(contactInformation[0], contactInformation[1], contactInformation[2]));
-				}
-				contactsListPanel.updateList();
-			}
-		}
 	}
 
 	@Override
@@ -303,10 +304,6 @@ public class ChatApp extends JFrame implements DialogClientInterface {
 		else if(dialogType.startsWith("NewAccountDialog")) {
 		}
 		else if(dialogType.startsWith("AddContactDialog")) {}
-		else if(dialogType.startsWith("FriendRequest")) {
-			client.connectToServer();
-			client.answerFriendRequest(user.getUsername(), friendRequestDialog.getContact().getUsername(), "BLOCKED");
-		}
 	}
 	
 	public static void main(String[] args) {
