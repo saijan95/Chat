@@ -8,3 +8,5 @@ Instructions
    the output match the CHATSERVERIP and CHATSERVERPORT variables in this file.
 4. Run the Chat.java
 
+Note: Basic functionalities are working but few bugs are still present. This project is still
+in development.
