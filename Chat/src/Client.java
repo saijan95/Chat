@@ -112,6 +112,18 @@ public class Client {
 		
 	}
 	
+	protected void deleteContact(String username, String contactUsername) {
+		try {
+			objectOut.writeObject(new String[]{"DELETE CONTACT", username, contactUsername});
+			objectOut.flush();
+		} catch (IOException e) {
+			System.out.println("CLIENT: Cannot communicate with server");
+		}
+		
+		disconnectFromServer();
+		
+	}
+	
 	protected void answerChatRequest(String username, String contactUsername, String answer) {
 		try {
 			objectOut.writeObject(new String[]{"ANSWER FR", username, contactUsername, answer});

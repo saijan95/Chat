@@ -10,11 +10,12 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 public class ChatApp extends JFrame implements DialogClientInterface {
-	private final String CHATSERVERIP = "192.168.12.5";
+	private final String CHATSERVERIP = "192.168.56.1";
 	private final int CHATSERVERPORT = 5000;
 	private static LoginDialog loginDialog;
 	private ContactsListPanel contactsListPanel;
 	private AddContactDialog addContactDialog;
+	private DeleteContactDialog deleteContactDialog;
 	private NewAccountDialog newAccountDialog;
 	private User user;
 	
@@ -75,7 +76,13 @@ public class ChatApp extends JFrame implements DialogClientInterface {
 		
 		addContactButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addContact();
+				showAddContactDialog();
+			}
+		});
+		
+		deleteContactButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showDeleteContactDialog();
 			}
 		});
 		
@@ -160,9 +167,14 @@ public class ChatApp extends JFrame implements DialogClientInterface {
 		showFriendRequests();
 	}
 
-	private void addContact() {
+	private void showAddContactDialog() {
 		addContactDialog = new AddContactDialog(this, "Add Contact", true);
 		addContactDialog.setVisible(true);
+	}
+	
+	private void showDeleteContactDialog() {
+		deleteContactDialog = new DeleteContactDialog(this, "Delete Contact", true);
+		deleteContactDialog.setVisible(true);
 	}
 	
 	private void showNewAccountDialog() {
